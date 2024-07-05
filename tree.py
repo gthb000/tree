@@ -55,28 +55,34 @@ def help():
 Usage:
     
     python3 tree.py
+or
     python3 tree.py <file>
+or
     python3 tree.py <file> <max_depth>
 """)
 
 def main():
-    if len(argv) == 1:
-        tree(".")
-    elif len(argv) == 2:
-        if argv[1] == "/":
-            tree("/")
+    try:
+        if len(argv) == 1:
+            tree(".")
+        elif len(argv) == 2:
+            if argv[1] == "/":
+                tree("/")
+            else:
+                listdir(argv[1].rstrip("/"))
+                tree(argv[1].rstrip("/"))
+        elif len(argv) == 3:
+            if argv[2].isdigit():
+                max_depth = int(argv[2])
+            else:
+                raise Exception("Argument 2 must be integer")
+            if argv[1] == "/":
+                tree("/", max_depth=max_depth)
+            else:
+                tree(argv[1].rstrip("/"), max_depth=max_depth)
         else:
-            tree(argv[1].rstrip("/"))
-    elif len(argv) == 3:
-        if argv[2].isdigit():
-            max_depth = int(argv[2])
-        else:
-            help()
-        if argv[1] == "/":
-            tree("/", max_depth=max_depth)
-        else:
-            tree(argv[1].rstrip("/"), max_depth=max_depth)
-    else:
+            raise Exception("Too many arguments given")
+    except:
         help()
 
 if __name__ == "__main__":
